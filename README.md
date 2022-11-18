@@ -1,6 +1,8 @@
 Math Project
 ========
 
+Access notebook demonstrating how the code works: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/TristanFaine/Master_2_MLVC_Recognize_Handwritten_Equation/blob/main/code_template_explanation.ipynb)
+
 Author/Contact: Harold Mouchère (harold.mouchere@univ-nantes.fr)
 
 This is a Master Project to apply machine (deep) learning tool on a challenging computer vision problem: recognition of handwritten Math Expression.
