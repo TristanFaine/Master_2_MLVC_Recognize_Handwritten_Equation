@@ -185,7 +185,7 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
 print('Finished Training')
 
 ### save the best model :
-#torch.save(best_model.state_dict(), "./best_model.nn")
+torch.save(best_model, "./segmentSelecter.nn")
 
 ##############################################################################
 # Prepare and draw the training curves
