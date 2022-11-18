@@ -10,11 +10,15 @@ import sys
 import random
 import itertools
 import sys, getopt
+import torch
 from convertInkmlToImg import parse_inkml,get_traces_data, getStrokesFromLG, convert_to_imgs, parseLG
 from skimage.io import imsave
+from torchvision.transforms import ToTensor
+from modules import SegmentSelector
 
 #TODO: refer to a trained model that we'll put in a data/ or models/ folder.
-
+model = SegmentSelector()
+model.load_state_dict(dict(torch.load('segmentSelecter.nn')))
 
 def usage():
     print ("usage: python3 [-o fname] [-s] segmentSelect.py inkmlfile lgFile ")
@@ -32,9 +36,7 @@ def computeProbSeg(alltraces, hyp, saveIm = False):
     if saveIm:
         imsave(hyp[0] + '.png', im)
     ##### call your classifier ! #####
-    #So, we generate an image from any given combination, and we check that this symbol is "correct"
-    # or junk.
-    #pytorch here we goooo
+    model(torch.Tensor(im))
     return random.random()
 
 def main():

@@ -19,6 +19,8 @@ import torchvision.transforms as transforms
 from random import sample
 from collections import Counter
 
+from modules import SegmentSelector
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # Assume that we are on a CUDA machine, then this should print a CUDA device:
@@ -57,8 +59,7 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=minibatchsize,
 # define the set of class names :
 classes = ('invalid', 'valid')
 print(classes)
-nb_classes = len(classes)
-print ("nb classes %d , training size %d, val size %d, test size %d" % (nb_classes,3*a_part,a_part,len(partialSet) - 4 * a_part ))
+print ("nb classes %d , training size %d, val size %d, test size %d" % (2,3*a_part,a_part,len(partialSet) - 4 * a_part ))
 ########################################################################
 # Let us show some of the training images, for fun.
 import matplotlib as mpl
@@ -93,21 +94,9 @@ print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-class NetMLP(nn.Module):
-    def __init__(self, hiddencells = 100):
-        super(NetMLP, self).__init__()
-        self.fc1 = nn.Linear(32 * 32 , hiddencells)
-        self.fc2 = nn.Linear(hiddencells, nb_classes)
-
-    def forward(self, x):
-        x = x.view(-1, 32 * 32)
-        x = F.relu(self.fc1(x))
-        x = F.softmax(self.fc2(x), dim=1)
-        return x
 ########################################################################
 # Define the network to use :
-net = NetMLP(100)
+net = SegmentSelector(100)
 net.to(device) # move it to GPU or CPU
 # show the structure :
 print(net)
@@ -185,7 +174,7 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
 print('Finished Training')
 
 ### save the best model :
-torch.save(best_model, "./segmentSelecter.nn")
+torch.save(best_model.state_dict(), "./segmentSelecter.nn")
 
 ##############################################################################
 # Prepare and draw the training curves
@@ -233,8 +222,8 @@ print('Accuracy of the network on the test images: %d %%' % (
     100 * correct / total))
 
 # Check the results for each class
-class_correct = list(0. for i in range(nb_classes))
-class_total = list(0. for i in range(nb_classes))
+class_correct = list(0. for i in range(2))
+class_total = list(0. for i in range(2))
 with torch.no_grad():
     for data in testloader:
         images, labels = data
@@ -248,7 +237,7 @@ with torch.no_grad():
             class_total[label] += 1
 
 
-for i in range(nb_classes):
+for i in range(2):
     if class_total[i] > 0 :
         print('Accuracy of %5s : %2d %% (%d/%d)' % (
             classes[i], 100 * class_correct[i] / class_total[i], class_correct[i] , class_total[i]))
