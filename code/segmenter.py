@@ -63,9 +63,12 @@ def main():
     outputLG = ""
     try:
         opts, args = getopt.getopt(sys.argv[1:], "i:o:s:", ["inkml=", "output=", "str="])
+        if not opts:
+            raise getopt.GetoptError('')
     except getopt.GetoptError as err:
         # print help information and exit:
-        print(err)  # will print something like "option -a not recognized"
+        if err.msg:
+            print(err)  # will print something like "option -a not recognized"
         usage()
         sys.exit(2)
     for o, a in opts:
