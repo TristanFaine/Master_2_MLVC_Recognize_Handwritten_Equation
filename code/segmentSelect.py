@@ -13,12 +13,13 @@ import sys, getopt
 import torch
 from convertInkmlToImg import parse_inkml,get_traces_data, getStrokesFromLG, convert_to_imgs, parseLG
 from skimage.io import imsave
-from torchvision.transforms import ToTensor
+from torchvision.transforms import Compose, ToTensor
 from modules import SegmentSelector
 
 #TODO: refer to a trained model that we'll put in a data/ or models/ folder.
 model = SegmentSelector()
-model.load_state_dict(dict(torch.load('segmentSelecter.nn')))
+model.load_state_dict(dict(torch.load('segmentSelector.nn')))
+img_to_tensor = Compose([ToTensor()])
 
 def usage():
     print ("usage: python3 [-o fname] [-s] segmentSelect.py inkmlfile lgFile ")
@@ -27,20 +28,20 @@ def usage():
     print ("     -o fname / --output fname : output file name (LG file)")
     print ("     -s         : save hyp images")
 
+
 """
 take an hypothesis (from LG = list of stroke index), select the corresponding strokes (from allTraces) and 
 return the probability of being a good segmentation [0:1]  
 """
 def computeProbSeg(alltraces, hyp, saveIm = False):
-    im = convert_to_imgs(get_traces_data(alltraces, hyp[1]), 28)
+    im = convert_to_imgs(get_traces_data(alltraces, hyp[1]), 1024)
     if saveIm:
         imsave(hyp[0] + '.png', im)
     ##### call your classifier ! #####
-    model(torch.Tensor(im))
-    return random.random()
+    im_tensor = img_to_tensor(im)
+    return float(model(im_tensor)[0][1])
 
 def main():
-
     try:
         opts, args = getopt.getopt(sys.argv[1:], "so:", ["output="])
     except getopt.GetoptError as err:
