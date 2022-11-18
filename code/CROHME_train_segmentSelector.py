@@ -38,6 +38,8 @@ transform = transforms.Compose(
 
 minibatchsize = 8
 
+# TODO: perform weighted random sampling for training set at least since our classes are unbalanced
+# https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
 fullset = torchvision.datasets.ImageFolder(root='../data/valid_symbols', transform=transform)
 
 partialSet = torch.utils.data.Subset(fullset, sample(range(len(fullset)), 1_000))
@@ -46,8 +48,25 @@ partialSet = torch.utils.data.Subset(fullset, sample(range(len(fullset)), 1_000)
 a_part = int(len(partialSet) / 5)
 trainset, validationset, testset = torch.utils.data.random_split(partialSet, [3 * a_part, a_part, len(partialSet) - 4 * a_part])
 
+#Get number of samples per class
+import numpy as np 
+
+y_train_indices = trainset.indices
+
+y_train = [partialSet.targets[i] for i in y_train_indices]
+
+class_sample_count = np.array([len(np.where(y_train == t)[0]) for t in np.unique(y_train)])
+
+#Then get weights for each class
+weight = 1. / class_sample_count
+samples_weight = np.array([weight[t] for t in y_train])
+samples_weight = torch.from_numpy(samples_weight)
+
+#Instantiate sampler and remember to refer to it inside the data loader
+weighted_sampler = WeightedRandomSampler(samples_weight.type('torch.DoubleTensor'), len(samples_weight))
+
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=minibatchsize,
-                                          shuffle=True,drop_last =True, num_workers=1)
+                                          sampler=weighted_sampler,drop_last =True, num_workers=1)
 
 validationloader = torch.utils.data.DataLoader(validationset, batch_size=minibatchsize,
                                           shuffle=False, drop_last =True,num_workers=0)
