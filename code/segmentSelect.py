@@ -72,8 +72,7 @@ def main():
     for h in hyplist:
         prob = computeProbSeg(traces, h, saveimg)
         #### select your threshold
-        if prob > 0.2:
-            output += "O,"+ h[0]+",*,"+str(prob)+","+",".join([str(s) for s in h[1]]) + "\n"
+        output += "O,"+ h[0]+",*,"+str(prob)+","+",".join([str(s) for s in h[1]]) + "\n"
     if outputLG != "":
         with open(outputLG, "w") as text_file:
             print(output, file=text_file)

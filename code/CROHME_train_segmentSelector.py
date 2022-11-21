@@ -53,7 +53,7 @@ import numpy as np
 
 y_train_indices = trainset.indices
 
-y_train = [partialSet.targets[i] for i in y_train_indices]
+y_train = [fullset.targets[i] for i in y_train_indices]
 
 class_sample_count = np.array([len(np.where(y_train == t)[0]) for t in np.unique(y_train)])
 
@@ -63,7 +63,7 @@ samples_weight = np.array([weight[t] for t in y_train])
 samples_weight = torch.from_numpy(samples_weight)
 
 #Instantiate sampler and remember to refer to it inside the data loader
-weighted_sampler = WeightedRandomSampler(samples_weight.type('torch.DoubleTensor'), len(samples_weight))
+weighted_sampler = torch.utils.data.WeightedRandomSampler(samples_weight.type('torch.DoubleTensor'), len(samples_weight))
 
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=minibatchsize,
                                           sampler=weighted_sampler,drop_last =True, num_workers=1)
