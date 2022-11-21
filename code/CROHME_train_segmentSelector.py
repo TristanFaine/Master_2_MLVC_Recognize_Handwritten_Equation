@@ -42,7 +42,7 @@ minibatchsize = 8
 # https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
 fullset = torchvision.datasets.ImageFolder(root='../data/valid_symbols', transform=transform)
 
-partialSet = torch.utils.data.Subset(fullset, sample(range(len(fullset)), 1_000))
+partialSet = torch.utils.data.Subset(fullset, sample(range(len(fullset)), 10_000))
 
 #split the full train part as train, validation and test, or use the 3 splits defined in the competition
 a_part = int(len(partialSet) / 5)
@@ -66,14 +66,14 @@ samples_weight = torch.from_numpy(samples_weight)
 weighted_sampler = torch.utils.data.WeightedRandomSampler(samples_weight.type('torch.DoubleTensor'), len(samples_weight))
 
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=minibatchsize,
-                                          sampler=weighted_sampler,drop_last =True, num_workers=1)
+                                        sampler=weighted_sampler,drop_last =True, num_workers=1)
 
 validationloader = torch.utils.data.DataLoader(validationset, batch_size=minibatchsize,
-                                          shuffle=False, drop_last =True,num_workers=0)
+                                        shuffle=False, drop_last =True,num_workers=0)
 
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=minibatchsize,
-                                         shuffle=False,drop_last =True, num_workers=0)
+                                        shuffle=False,drop_last =True, num_workers=0)
 
 # define the set of class names :
 classes = ('invalid', 'valid')
@@ -127,7 +127,7 @@ print(net)
 import torch.optim as optim
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
 
 
 ########################################################################

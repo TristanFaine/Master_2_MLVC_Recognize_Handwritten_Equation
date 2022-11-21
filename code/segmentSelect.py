@@ -11,10 +11,13 @@ import random
 import itertools
 import sys, getopt
 import torch
+import numpy as np
 from convertInkmlToImg import parse_inkml,get_traces_data, getStrokesFromLG, convert_to_imgs, parseLG
 from skimage.io import imsave
 from torchvision.transforms import Compose, ToTensor
 from modules import SegmentSelector
+
+from globals import *
 
 #TODO: refer to a trained model that we'll put in a data/ or models/ folder.
 model = SegmentSelector()
@@ -34,10 +37,9 @@ take an hypothesis (from LG = list of stroke index), select the corresponding st
 return the probability of being a good segmentation [0:1]  
 """
 def computeProbSeg(alltraces, hyp, saveIm = False):
-    im = convert_to_imgs(get_traces_data(alltraces, hyp[1]), 1024)
+    im = np.squeeze(np.asarray(convert_to_imgs(get_traces_data(alltraces, hyp[1]), IMG_SIZE)))
     if saveIm:
         imsave(hyp[0] + '.png', im)
-    ##### call your classifier ! #####
     im_tensor = img_to_tensor(im)
     return float(model(im_tensor)[0][1])
 
