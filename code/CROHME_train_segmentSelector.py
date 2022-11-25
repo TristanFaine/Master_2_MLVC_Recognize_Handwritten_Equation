@@ -42,7 +42,9 @@ minibatchsize = 8
 # https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
 fullset = torchvision.datasets.ImageFolder(root='../data/valid_symbols', transform=transform)
 
-partialSet = torch.utils.data.Subset(fullset, sample(range(len(fullset)), 10_000))
+nb_images = 20_000
+partialSet = torch.utils.data.Subset(fullset, list(range(nb_images//2)) + list(range(len(fullset) - nb_images//2, len(fullset))))
+print(len(partialSet))
 
 #split the full train part as train, validation and test, or use the 3 splits defined in the competition
 a_part = int(len(partialSet) / 5)
@@ -53,7 +55,7 @@ import numpy as np
 
 y_train_indices = trainset.indices
 
-y_train = [fullset.targets[i] for i in y_train_indices]
+y_train = [partialSet[i][1] for i in y_train_indices]
 
 class_sample_count = np.array([len(np.where(y_train == t)[0]) for t in np.unique(y_train)])
 
@@ -221,7 +223,7 @@ outputs = best_model(images)
 
 # get the maximum class number for each sample, but print the corresponding class name
 _, predicted = torch.max(outputs, 1)
-print('Predicted: ', ' '.join('%5s' % classes[predicted[j]]
+print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] if predicted[j] in (0, 1) else str(predicted[j])
                               for j in range(minibatchsize)))
 
 # Test now  on the whole test dataset.
