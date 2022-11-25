@@ -42,9 +42,12 @@ minibatchsize = 8
 # https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
 fullset = torchvision.datasets.ImageFolder(root='../data/valid_symbols', transform=transform)
 
-nb_images = 20_000
-partialSet = torch.utils.data.Subset(fullset, list(range(nb_images//2)) + list(range(len(fullset) - nb_images//2, len(fullset))))
-print(len(partialSet))
+nb_images = 20_000 # <= 37,857
+partialSet = torch.utils.data.Subset(
+    fullset,
+    sample(range(37857), nb_images//2) +
+    sample(range(37858, len(fullset)), nb_images//2)
+)
 
 #split the full train part as train, validation and test, or use the 3 splits defined in the competition
 a_part = int(len(partialSet) / 5)
