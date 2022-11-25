@@ -2,7 +2,7 @@ import torch.nn.functional as F
 from torch.nn import Module, Conv2d, MaxPool2d, Linear, BatchNorm2d, Sequential, ReLU, Dropout
 
 class SegmentSelector(Module):
-    def __init__(self, hiddencells = 100):
+    def __init__(self):
         super(SegmentSelector, self).__init__()
         self.conv1 = Conv2d(1, 6, 5)
         self.pool = MaxPool2d(2, 2)
