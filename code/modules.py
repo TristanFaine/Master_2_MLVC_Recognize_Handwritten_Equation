@@ -23,7 +23,7 @@ class SegmentSelector(Module):
 
 
 class AlexNet(Module):
-    def __init__(self, num_classes=10):
+    def __init__(self, num_classes=2):
         super(AlexNet, self).__init__()
         self.layer1 = Sequential(
             Conv2d(1, 96, kernel_size=11, stride=4, padding=0),

@@ -81,9 +81,9 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=minibatchsize,
                                         shuffle=False,drop_last =True, num_workers=0)
 
 # define the set of class names :
-classes = ('invalid', 'valid')
+classes = [x[0].replace('../data/symbol_recognition/','') for x in os.walk('../data/symbol_recognition/')][1:] # all subdirectories, except itself
 print(classes)
-print ("nb classes %d , training size %d, val size %d, test size %d" % (2,3*a_part,a_part,len(partialSet) - 4 * a_part ))
+print ("nb classes %d , training size %d, val size %d, test size %d" % (len(classes),3*a_part,a_part,len(partialSet) - 4 * a_part ))
 ########################################################################
 # Let us show some of the training images, for fun.
 import matplotlib as mpl
@@ -120,7 +120,7 @@ import torch.nn.functional as F
 
 ########################################################################
 # Define the network to use :
-net = AlexNet(2)
+net = AlexNet(len(classes))
 net.to(device) # move it to GPU or CPU
 # show the structure :
 print(net)
@@ -198,7 +198,7 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
 print('Finished Training')
 
 ### save the best model :
-torch.save(best_model.state_dict(), "./segmentSelector.nn")
+torch.save(best_model.state_dict(), "./segmentReco.nn")
 
 ##############################################################################
 # Prepare and draw the training curves
@@ -246,8 +246,8 @@ print('Accuracy of the network on the test images: %d %%' % (
     100 * correct / total))
 
 # Check the results for each class
-class_correct = list(0. for i in range(2))
-class_total = list(0. for i in range(2))
+class_correct = list(0. for i in range(len(classes)))
+class_total = list(0. for i in range(len(classes)))
 with torch.no_grad():
     for data in testloader:
         images, labels = data
@@ -261,7 +261,7 @@ with torch.no_grad():
             class_total[label] += 1
 
 
-for i in range(2):
+for i in range(len(classes)):
     if class_total[i] > 0 :
         print('Accuracy of %5s : %2d %% (%d/%d)' % (
             classes[i], 100 * class_correct[i] / class_total[i], class_correct[i] , class_total[i]))
