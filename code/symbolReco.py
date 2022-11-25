@@ -38,6 +38,15 @@ def computeClProb(alltraces, hyp, min_threshol, saveIm = False):
     ##### call your classifier and fill the results ! #####
 
     result = {}
+
+    #Then call softmax to get proper probabilities between 1 and 0 or smth
+    #output = torch.nn.functional.softmax(outputs,dim=1)
+    #for index, val in enumerate(truc[0]):
+    #  #TODO: Change output if needed
+    #  if val.item()>0.05:
+    #    result[classes[i]]=val.item()
+
+
     ## artificially simulate network output (sum(p_i) = 1)
     problist = [random.random()*random.random() for x in classes]
     sumprob = sum(problist)

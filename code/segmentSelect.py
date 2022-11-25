@@ -14,15 +14,17 @@ import torch
 import numpy as np
 from convertInkmlToImg import parse_inkml,get_traces_data, getStrokesFromLG, convert_to_imgs, parseLG
 from skimage.io import imsave
-from torchvision.transforms import Compose, ToTensor
-from modules import SegmentSelector
+from torchvision.transforms import Compose, ToTensor, Normalize
+from modules import SegmentSelector, AlexNet
 
 from globals import *
 
 #TODO: refer to a trained model that we'll put in a data/ or models/ folder.
-model = SegmentSelector()
+model = AlexNet()
 model.load_state_dict(dict(torch.load('segmentSelector.nn')))
-img_to_tensor = Compose([ToTensor()])
+img_to_tensor = Compose([
+  ToTensor(),
+  Normalize((0.5,), (0.5,))])
 
 def usage():
     print ("usage: python3 [-o fname] [-s] segmentSelect.py inkmlfile lgFile ")
@@ -41,7 +43,12 @@ def computeProbSeg(alltraces, hyp, saveIm = False):
     if saveIm:
         imsave(hyp[0] + '.png', im)
     im_tensor = img_to_tensor(im)
-    return float(model(im_tensor)[0][1])
+    # Give it a "batch size" of 1
+    im_tensor = im_tensor.unsqueeze(0)
+
+    # Use softmax to set probabilities between 0 and 1
+    output = torch.nn.functional.softmax(model(im_tensor),dim=1)
+    return output[0][0].item()
 
 def main():
     try:
@@ -74,7 +81,9 @@ def main():
     for h in hyplist:
         prob = computeProbSeg(traces, h, saveimg)
         #### select your threshold
-        output += "O,"+ h[0]+",*,"+str(prob)+","+",".join([str(s) for s in h[1]]) + "\n"
+        #TODO: put threshold here.
+        if prob > 0.5: 
+          output += "O,"+ h[0]+",*,"+str(prob)+","+",".join([str(s) for s in h[1]]) + "\n"
     if outputLG != "":
         with open(outputLG, "w") as text_file:
             print(output, file=text_file)

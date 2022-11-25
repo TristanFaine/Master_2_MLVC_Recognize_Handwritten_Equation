@@ -19,7 +19,7 @@ import torchvision.transforms as transforms
 from random import sample
 from collections import Counter
 
-from modules import SegmentSelector, AlexNet
+from modules import AlexNet
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
