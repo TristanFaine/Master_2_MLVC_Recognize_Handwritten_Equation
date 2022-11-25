@@ -19,7 +19,7 @@ import torchvision.transforms as transforms
 from random import sample
 from collections import Counter
 
-from modules import SegmentSelector
+from modules import SegmentSelector, AlexNet
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -120,7 +120,7 @@ import torch.nn.functional as F
 
 ########################################################################
 # Define the network to use :
-net = SegmentSelector(100)
+net = AlexNet()
 net.to(device) # move it to GPU or CPU
 # show the structure :
 print(net)
