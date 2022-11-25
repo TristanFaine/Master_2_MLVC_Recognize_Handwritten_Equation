@@ -38,15 +38,21 @@ transform = transforms.Compose(
 
 minibatchsize = 8
 
-# TODO: perform weighted random sampling for training set at least since our classes are unbalanced
-# https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
-fullset = torchvision.datasets.ImageFolder(root='../data/valid_symbols', transform=transform)
 
-nb_images = 20_000 # <= 37,857
+#TODO: From like 20000 images, get at least "enough" from each class,
+#hmmmm
+fullset = torchvision.datasets.ImageFolder(root='../data/symbol_recognition', transform=transform)
+
+nb_images = 80_000
+
+#TODO: Need to find a way to get a stratified sample of the dataset, capped to 20000 items.
+
+#ahhh wait maybe I could somehow instantiate the sampler here and use it on the indices
+
+
 partialSet = torch.utils.data.Subset(
     fullset,
-    sample(range(37857), nb_images//2) +
-    sample(range(37858, len(fullset)), nb_images//2)
+    sample(range(nb_images//2), nb_images//2)
 )
 
 #split the full train part as train, validation and test, or use the 3 splits defined in the competition
@@ -109,6 +115,8 @@ imshow(torchvision.utils.make_grid(images))
 # print labels
 print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
+#Why do I only have dots and lts??? are they just too prevalent??
+
 
 ########################################################################
 # 2. Define a Convolution Neural Network
@@ -138,6 +146,26 @@ optimizer = optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
 ########################################################################
 # Train the network
 # ^^^^^^^^^^^^^^^^^^^^
+
+class EarlyStopper:
+    def __init__(self, patience=1, min_delta=0):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.min_validation_loss = np.inf
+
+    def early_stop(self, validation_loss):
+        if validation_loss < self.min_validation_loss:
+            self.min_validation_loss = validation_loss
+            self.counter = 0
+        elif validation_loss > (self.min_validation_loss + self.min_delta):
+            self.counter += 1
+            if self.counter >= self.patience:
+                return True
+        return False
+
+early_stopper = EarlyStopper(patience=3, min_delta=0)
+early_stop_break = False
 
 # Definition of arrays to store the results and draw the learning curves
 val_err_array = np.array([])
@@ -192,8 +220,23 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
             nb_sample_array = np.append(nb_sample_array, nb_used_sample)
 
             # save the model only when loss is better
-            best_model =  copy.deepcopy(net)
+            if val_err <= best_val_loss:
+                best_val_loss = val_err
+                best_model = copy.deepcopy(net)
+
+            # Early stopping implementation:
+            if early_stopper.early_stop(val_err):
+                early_stop_break = True   
+                break
+                
+        if early_stop_break: # End iteration over dataloader
+            break
+
     print("Epoch {} of {} took {:.3f}s".format(epoch + 1, num_epochs, time.time() - start_time))
+
+    if early_stop_break: # End iterating over epochs
+        print("Warning: current epoch stopped early due to early stopping strategy")
+        break
 
 print('Finished Training')
 

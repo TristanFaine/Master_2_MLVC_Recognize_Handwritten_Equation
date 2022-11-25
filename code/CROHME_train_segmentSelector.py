@@ -139,6 +139,27 @@ optimizer = optim.SGD(net.parameters(), lr=0.0001, momentum=0.9)
 # Train the network
 # ^^^^^^^^^^^^^^^^^^^^
 
+class EarlyStopper:
+    def __init__(self, patience=1, min_delta=0):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.min_validation_loss = np.inf
+
+    def early_stop(self, validation_loss):
+        if validation_loss < self.min_validation_loss:
+            self.min_validation_loss = validation_loss
+            self.counter = 0
+        elif validation_loss > (self.min_validation_loss + self.min_delta):
+            self.counter += 1
+            if self.counter >= self.patience:
+                return True
+        return False
+        
+# Initialize early stopping strategy
+early_stopper = EarlyStopper(patience=3, min_delta=0)
+early_stop_break = False
+
 # Definition of arrays to store the results and draw the learning curves
 val_err_array = np.array([])
 train_err_array = np.array([])
@@ -148,6 +169,10 @@ nb_sample_array = np.array([])
 best_val_loss = 1000000
 best_epoch = 0
 best_model =  copy.deepcopy(net)
+
+
+
+
 
 nb_used_sample = 0
 running_loss = 0.0
@@ -192,8 +217,24 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
             nb_sample_array = np.append(nb_sample_array, nb_used_sample)
 
             # save the model only when loss is better
-            best_model =  copy.deepcopy(net)
+            if val_err <= best_val_loss:
+                best_val_loss = val_err
+                best_model = copy.deepcopy(net)
+
+            # Early stopping implementation:
+            if early_stopper.early_stop(val_err):
+                early_stop_break = True   
+                break
+        if early_stop_break: # End iteration over dataloader
+            break
+
     print("Epoch {} of {} took {:.3f}s".format(epoch + 1, num_epochs, time.time() - start_time))
+
+    if early_stop_break: # End iterating over epochs
+        print("Warning: current epoch stopped early due to early stopping strategy")
+        break
+
+
 
 print('Finished Training')
 
