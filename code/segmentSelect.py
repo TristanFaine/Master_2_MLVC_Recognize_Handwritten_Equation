@@ -19,9 +19,13 @@ from modules import SegmentSelector, AlexNet
 
 from globals import *
 
-#TODO: refer to a trained model that we'll put in a data/ or models/ folder.
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+# Instantiating the model used for predicting if a stroke combination is valid or not
 model = AlexNet()
+model.to(device)
 model.load_state_dict(dict(torch.load('segmentSelector.nn')))
+model.eval()
 img_to_tensor = Compose([
   ToTensor(),
   Normalize((0.5,), (0.5,))])
@@ -45,9 +49,11 @@ def computeProbSeg(alltraces, hyp, saveIm = False):
     im_tensor = img_to_tensor(im)
     # Give it a "batch size" of 1
     im_tensor = im_tensor.unsqueeze(0)
+    im_tensor = im_tensor.to(device)
 
     # Use softmax to set probabilities between 0 and 1
-    output = torch.nn.functional.softmax(model(im_tensor),dim=1)
+    with torch.no_grad():
+      output = torch.nn.functional.softmax(model(im_tensor),dim=1)
     return output[0][0].item()
 
 def main():
@@ -81,7 +87,6 @@ def main():
     for h in hyplist:
         prob = computeProbSeg(traces, h, saveimg)
         #### select your threshold
-        #TODO: put threshold here.
         if prob > 0.5: 
           output += "O,"+ h[0]+",*,"+str(prob)+","+",".join([str(s) for s in h[1]]) + "\n"
     if outputLG != "":
