@@ -1,0 +1,2 @@
+Architecture,Dataset_size,Accuracy,Accuracy_of_invalid,Accuracy_of_valid
+AlexNet,20000,0.81,0.78,0.83
