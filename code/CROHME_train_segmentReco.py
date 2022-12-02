@@ -43,13 +43,7 @@ minibatchsize = 8
 #hmmmm
 fullset = torchvision.datasets.ImageFolder(root='../data/symbol_recognition', transform=transform)
 
-nb_images = 80_000
-
-#TODO: Need to find a way to get a stratified sample of the dataset, capped to 20000 items.
-
-#ahhh wait maybe I could somehow instantiate the sampler here and use it on the indices
-
-
+nb_images = 20_000
 partialSet = torch.utils.data.Subset(
     fullset,
     sample(range(nb_images//2), nb_images//2)
@@ -252,7 +246,7 @@ plt.xlabel('epoch')
 plt.ylabel('val / train LOSS')
 plt.title('Symbol classifier')
 plt.plot(nb_sample_array.tolist(), val_err_array.tolist(), 'b',nb_sample_array.tolist(), train_err_array.tolist(), 'r', [best_epoch], [best_val_loss],         'go')
-plt.savefig('resultMLP.png')
+plt.savefig('graph_train_segmentReco.png')
 
 ########################################################################
 # Test the network on the test data

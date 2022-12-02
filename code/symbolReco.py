@@ -7,11 +7,28 @@
 # Copyright (c) 2018, Harold Mouchere
 ################################################################
 import sys
+import os
 import random
 import itertools
+import torch
 import sys, getopt
 from convertInkmlToImg import parse_inkml,get_traces_data, getStrokesFromLG, convert_to_imgs, parseLG
 from skimage.io import imsave
+from torchvision.transforms import Compose, ToTensor, Normalize
+from modules import SegmentSelector, AlexNet
+
+from globals import *
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+# Instantiating the model used for predicting if a stroke combination is valid or not
+model = AlexNet(101)
+model.to(device)
+model.load_state_dict(dict(torch.load('segmentReco.nn')))
+model.eval()
+img_to_tensor = Compose([
+  ToTensor(),
+  Normalize((0.5,), (0.5,))])
 
 
 def usage():
@@ -29,14 +46,15 @@ Keep only the classes with a score higher than a threshold
 """
 
 def computeClProb(alltraces, hyp, min_threshol, saveIm = False):
-    im = convert_to_imgs(get_traces_data(alltraces, hyp[1]), 28)
+    im = convert_to_imgs(get_traces_data(alltraces, hyp[1]), IMG_SIZE)
     if saveIm:
         imsave(hyp[0] + '.png', im)
     # create the list of possible classes (maybe connected to your classifier ???)
+    classes = [x[0].replace('../data/symbol_recognition/','') for x in os.walk('../data/symbol_recognition/')][1:] # all subdirectories, except itself
     classes = list("abcdefghijklmnoprstuvwxyzABCEFXYZ0123456789+-=(){}") # one character classes
     classes.extend(["div", "int", "sum", "pi", "gt", "geq","lt","leq"]) # add some other
-    ##### call your classifier and fill the results ! #####
 
+    #TODO: iterate over folder and make from that
     result = {}
 
     #Then call softmax to get proper probabilities between 1 and 0 or smth

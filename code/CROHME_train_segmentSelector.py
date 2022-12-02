@@ -38,8 +38,7 @@ transform = transforms.Compose(
 
 minibatchsize = 8
 
-# TODO: perform weighted random sampling for training set at least since our classes are unbalanced
-# https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
+
 fullset = torchvision.datasets.ImageFolder(root='../data/valid_symbols', transform=transform)
 
 nb_images = 20_000 # <= 37,857
@@ -170,10 +169,6 @@ best_val_loss = 1000000
 best_epoch = 0
 best_model =  copy.deepcopy(net)
 
-
-
-
-
 nb_used_sample = 0
 running_loss = 0.0
 num_epochs = 10
@@ -234,8 +229,6 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         print("Warning: current epoch stopped early due to early stopping strategy")
         break
 
-
-
 print('Finished Training')
 
 ### save the best model :
@@ -250,7 +243,7 @@ plt.xlabel('epoch')
 plt.ylabel('val / train LOSS')
 plt.title('Symbol classifier')
 plt.plot(nb_sample_array.tolist(), val_err_array.tolist(), 'b',nb_sample_array.tolist(), train_err_array.tolist(), 'r', [best_epoch], [best_val_loss],         'go')
-plt.savefig('resultMLP.png')
+plt.savefig('graph_train_segmentSelector.png')
 
 ########################################################################
 # Test the network on the test data
