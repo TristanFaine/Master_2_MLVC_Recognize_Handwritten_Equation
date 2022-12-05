@@ -43,11 +43,16 @@ minibatchsize = 8
 #hmmmm
 fullset = torchvision.datasets.ImageFolder(root='../data/symbol_recognition', transform=transform)
 
-nb_images = 20_000
+indices_by_class = [[] for _ in range(101)]
+for i, s in enumerate(fullset):
+    indices_by_class[s[1]].append(i)
+
+partialSetRatio = 1 / 2
 partialSet = torch.utils.data.Subset(
     fullset,
-    sample(range(nb_images//2), nb_images//2)
+    [s for cls in indices_by_class for s in sample(cls, int(partialSetRatio * len(cls)))]
 )
+
 
 #split the full train part as train, validation and test, or use the 3 splits defined in the competition
 a_part = int(len(partialSet) / 5)
