@@ -10,6 +10,7 @@ import sys
 import os
 import random
 import itertools
+import numpy as np
 import torch
 import sys, getopt
 from convertInkmlToImg import parse_inkml,get_traces_data, getStrokesFromLG, convert_to_imgs, parseLG
@@ -46,23 +47,25 @@ Keep only the classes with a score higher than a threshold
 """
 
 def computeClProb(alltraces, hyp, min_threshol, saveIm = False):
-    im = convert_to_imgs(get_traces_data(alltraces, hyp[1]), IMG_SIZE)
+    # Convert image to tensor
+    im = np.squeeze(np.asarray(convert_to_imgs(get_traces_data(alltraces, hyp[1]), IMG_SIZE)))
     if saveIm:
         imsave(hyp[0] + '.png', im)
-    # create the list of possible classes (maybe connected to your classifier ???)
+    im_tensor = img_to_tensor(im)
+    # Give it a "batch size" of 1
+    im_tensor = im_tensor.unsqueeze(0)
+    im_tensor = im_tensor.to(device)
+
+    # create the list of possible classes
     classes = [x[0].replace('../data/symbol_recognition/','') for x in os.walk('../data/symbol_recognition/')][1:] # all subdirectories, except itself
-    classes = list("abcdefghijklmnoprstuvwxyzABCEFXYZ0123456789+-=(){}") # one character classes
-    classes.extend(["div", "int", "sum", "pi", "gt", "geq","lt","leq"]) # add some other
 
-    #TODO: iterate over folder and make from that
+    # Get probabilites of symbols, but keep only those who exceed threshold.
     result = {}
-
-    #Then call softmax to get proper probabilities between 1 and 0 or smth
-    #output = torch.nn.functional.softmax(outputs,dim=1)
-    #for index, val in enumerate(truc[0]):
-    #  #TODO: Change output if needed
-    #  if val.item()>0.05:
-    #    result[classes[i]]=val.item()
+    with torch.no_grad():
+      output = torch.nn.functional.softmax(model(im_tensor),dim=1)
+    for index, val in enumerate(output[0]):
+      if val.item()>min_threshol:
+        result[classes[index]]=val.item()
 
 
     ## artificially simulate network output (sum(p_i) = 1)
