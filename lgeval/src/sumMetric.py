@@ -159,9 +159,6 @@ def main():
 		nbEM+=1
 	
 	# Compile and display the sum for each metric.
-	print(allValues.keys())
-	print("aaaaa")
-
 	allSum = {}
 	allZeroCount = {}
 	zeroFileList = {}

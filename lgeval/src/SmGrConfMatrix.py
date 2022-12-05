@@ -284,9 +284,9 @@ class ConfMatrixObject(object):
                 # first count all errors for each object (over the full sub matrix)
 		for (obj,errmat) in self.mat.getIter():
 			nbE = Counter()
-		for (_,c) in errmat.mat.getIter():
-			nbE = nbE + sum([v for (_,v) in c.getIter()], Counter())
-			sortedList.append((obj,errmat,nbE))
+			for (_,c) in errmat.mat.getIter():
+				nbE = nbE + sum([v for (_,v) in c.getIter()], Counter())
+				sortedList.append((obj,errmat,nbE))
 		sortedList = sorted(sortedList, key=lambda t:t[2].get(), reverse=True)
 
 		# Entries for object graphs ('main' rows)
