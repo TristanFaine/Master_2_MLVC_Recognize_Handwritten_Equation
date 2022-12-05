@@ -69,11 +69,11 @@ class Counter(object):
 	
 	def __init__(self,*args):
 		self.value = 0
-                self.list = []
-                if(len(args)> 0):
-                        self.value = int(args[0])
-                        if (len(args) == 2):
-                                self.list = args[1]
+		self.list = []
+		if(len(args)> 0):
+				self.value = int(args[0])
+				if (len(args) == 2):
+						self.list = args[1]
 	def incr(self,elem=None):
 		self.value = self.value +1
 		if elem != None:
@@ -84,16 +84,16 @@ class Counter(object):
 		return self.value
 	def set(self,v):
 		self.value = int(v)
-        def getList(self,unique = True):
-                if unique:
-                        return list(set(self.list))
-                else:
-                        return self.list
-        def add(self,c2):
-                return Counter(self.value + c2.value, self.list + c2.list)
+	def getList(self,unique = True):
+				if unique:
+						return list(set(self.list))
+				else:
+						return self.list
+	def add(self,c2):
+		return Counter(self.value + c2.value, self.list + c2.list)
 
-        def __add__(self,c2):
-                return Counter(self.value + c2.value, self.list + c2.list)
+		def __add__(self,c2):
+				return Counter(self.value + c2.value, self.list + c2.list)
 
 	def __str__(self):
 		return str(self.value)
@@ -111,8 +111,8 @@ class ConfMatrix(object):
 		return len(self.mat.myitems)
 
 	def incr(self, row, column, elem=None):
-                """ add 1 (one) to the counter indexed by row and column
-                an object can be added in the attached list"""
+		""" add 1 (one) to the counter indexed by row and column
+		an object can be added in the attached list"""
 		self.mat.get(row, SmDict).get(column,Counter).incr(elem)
 	def __str__(self):
 		return str(self.mat)
@@ -156,11 +156,11 @@ class ConfMatrix(object):
 		outputStream.write('</table>\n<p>')
 
 	def toHTML(self, outputStream, limit = 0, targetLimit = 1, viewerURL="", redn = [], rede = [], parentObject=0):
-                """ write in the output stream the HTML code for this matrix and
-                return a Counter object with
-                the number of unshown errors and the list of hidden elements
-                The list of files with errors is prefixed with the param viewerURL
-                in the href attribute."""
+		""" write in the output stream the HTML code for this matrix and
+		return a Counter object with
+		the number of unshown errors and the list of hidden elements
+		The list of files with errors is prefixed with the param viewerURL
+		in the href attribute."""
 		
 		arrow = True
 		hiddenErr = Counter()
@@ -271,10 +271,10 @@ class ConfMatrixObject(object):
 		return count
 
 	def toHTML(self, outputStream, limit = 0, viewerURL="", redn = {}):
-                """ write in the output stream the HTML code for this matrix and
-                use the ConfMatrix.toHTML to write the submatrices.
-                The list of files with error is prefixed with the param viewerURL
-                in the href attribute. """
+		""" write in the output stream the HTML code for this matrix and
+		use the ConfMatrix.toHTML to write the submatrices.
+		The list of files with error is prefixed with the param viewerURL
+		in the href attribute. """
 		outputStream.write(' <table><tr>')
 		outputStream.write('<th><input type="checkbox" id="Obj"></th><th>Object Targets</th><th>Primitive Targets and Errors</th>')
 		outputStream.write('</tr>')
@@ -284,8 +284,8 @@ class ConfMatrixObject(object):
                 # first count all errors for each object (over the full sub matrix)
 		for (obj,errmat) in self.mat.getIter():
 			nbE = Counter()
-                        for (_,c) in errmat.mat.getIter():
-                                nbE = nbE + sum([v for (_,v) in c.getIter()], Counter())
+		for (_,c) in errmat.mat.getIter():
+			nbE = nbE + sum([v for (_,v) in c.getIter()], Counter())
 			sortedList.append((obj,errmat,nbE))
 		sortedList = sorted(sortedList, key=lambda t:t[2].get(), reverse=True)
 

@@ -20,7 +20,7 @@ def addOneError(confM, id1, id2):
 
 def affMat(output, allID, confM):
 	# Header
-        output.write("Output:")
+	output.write("Output:")
 	for k in sorted(allID):
 		output.write(",'"+str(k)+"'")
 	output.write("\n")
@@ -36,7 +36,7 @@ def affMat(output, allID, confM):
 		output.write("\n")
 
 def affMatHTML(output, allID, confM):
-        output.write("<table>\n<tr><th><i>(Out:Rows)</i></th>")
+	output.write("<table>\n<tr><th><i>(Out:Rows)</i></th>")
 	for k in sorted(allID):
 		output.write("<th>"+str(k)+"</th>")
 	output.write("</tr>\n")

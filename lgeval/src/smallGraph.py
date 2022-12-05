@@ -251,31 +251,31 @@ def test():
 	sg.edges[("1","3")] = "U"
 	sg.printLG()
 	line = str(sg)
-	print line
+	print(line)
 	sg2 = SmallGraph()
 	sg2.fromStr(line)
 	sg2.printLG()
-	print "Are they Iso (Y) : " + (str(sg == sg2))
+	print("Are they Iso (Y) : " + (str(sg == sg2)))
 	sg2.edges[('2','3')] = 'R'
-	print "Add an edge (2,3,R) on right side "
-	print "Are they Iso (N) : " + (str(sg == sg2))
+	print("Add an edge (2,3,R) on right side ")
+	print("Are they Iso (N) : " + (str(sg == sg2)))
 	sg.edges[('2','3')] = 'U'
-	print "Add an edge (2,3,U) on left side "
-	print "Are they Iso (N) : " + (str(sg == sg2))
-	print "change edge (2,3) to R on left side "
-	sg.edges[('2','3')] = 'R'	
-	print "Are they Iso (Y) : " + (str(sg == sg2))
-	print "New graph : "
+	print("Add an edge (2,3,U) on left side ")
+	print("Are they Iso (N) : " + (str(sg == sg2)))
+	print("change edge (2,3) to R on left side ")
+	sg.edges[('2','3')] = 'R'
+	print("Are they Iso (Y) : " + (str(sg == sg2)))
+	print("New graph : ")
 	sg2 = SmallGraph([("1","B"),("2","C"), ("3","A")], [("3", "1", "R"), ("3", "2", "U")])
 	sg2.printLG()
-	print "Are they Iso (N) : " + (str(sg.iso(sg2)))
+	print("Are they Iso (N) : " + (str(sg.iso(sg2))))
 	sg2.edges[('1','2')] = 'U'
-	print "Add an edge (2,1,U) on right side "
-	print "Are they Iso (N) : " + (str(sg.iso(sg2))) + (str(sg2.iso(sg)))
+	print("Add an edge (2,1,U) on right side ")
+	print("Are they Iso (N) : " + (str(sg.iso(sg2))) + (str(sg2.iso(sg))))
 	sg2.edges[('1','2')] = 'R'
-	print "Change edge (2,1)  to R on right side "
-	print "Are they Iso (Y) : " + (str(sg.iso(sg2)))+ (str(sg2.iso(sg)))
-	print " SVG test : "
+	print("Change edge (2,1)  to R on right side ")
+	print("Are they Iso (Y) : " + (str(sg.iso(sg2)))+ (str(sg2.iso(sg))))
+	print(" SVG test : ")
 	sg.nodes["1"] = "Test"
-	print sg.toSVG()
+	print(sg.toSVG())
 				

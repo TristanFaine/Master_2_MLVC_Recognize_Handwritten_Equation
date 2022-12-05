@@ -1120,7 +1120,7 @@ class Lg(object):
 	def hideUnlabeledEdges(self):
 		"""Move all missing/unlabeled edges to the hiddenEdges field."""
 		# Move all edges labeled '_' to the hiddenEdges field.
-		for edge in self.elabels.keys():
+		for edge in list(self.elabels):
 			if set( self.elabels[ edge ].keys() ) == \
 					set( [ '_' ] ):
 				self.hiddenEdges[ edge ] = self.elabels[ edge ]
@@ -1129,7 +1129,7 @@ class Lg(object):
 	def restoreUnlabeledEdges(self):
 		"""Move all edges in the hiddenEdges field back to the set of
 		edges for the graph."""
-		for edge in self.hiddenEdges.keys():
+		for edge in list(self.hiddenEdges):
 			self.elabels[ edge ] = self.hiddenEdges[ edge ]
 			del self.hiddenEdges[ edge ]
 

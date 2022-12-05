@@ -17,23 +17,24 @@ OUTDIR=$2
 if ! [ -d $OUTDIR ] 
 then
 	mkdir $OUTDIR
-	mkdir hyp_$OUTDIR
-	mkdir seg_$OUTDIR
-	mkdir symb_$OUTDIR
+	mkdir $OUTDIR/hyp
+	mkdir $OUTDIR/seg
+	mkdir $OUTDIR/symb
+  mkdir $OUTDIR/result
 fi
 
 for file in $1/*.inkml
 do
 	echo "Recognize: $file"
 	BNAME=`basename $file .inkml`
-	OUT="$OUTDIR/$BNAME.lg"
-	python3 segmenter.py -i $file -o hyp_$OUT 
+	OUT="$OUTDIR"
+	python3 segmenter.py -i $file -o $OUT/hyp/$BNAME.lg
 	ERR=$? # test de l'erreur au cas où...
-	 python3 segmentSelect.py -o seg_$OUT  $file hyp_$OUT  
+	 python3 segmentSelect.py -o $OUT/seg/$BNAME.lg  $file $OUT/hyp/$BNAME.lg
 	ERR=$ERR || $?
-	 python3 symbolReco.py  -o symb_$OUT $file seg_$OUT  
+	 python3 symbolReco.py  -o $OUT/symb/$BNAME.lg $file $OUT/seg/$BNAME.lg
 	ERR=$ERR || $?
-	 python3 selectBestSeg.py -o $OUT symb_$OUT 
+	 python3 selectBestSeg.py -o $OUT/result/$BNAME.lg $OUT/symb/$BNAME.lg
 	ERR=$ERR || $?
 	
 	if [ $ERR -ne 0 ]

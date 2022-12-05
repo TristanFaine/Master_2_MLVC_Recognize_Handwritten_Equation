@@ -80,7 +80,7 @@ def printTable( field_width, entries):
 			labelFormat += '{0[' + str(i) + ']:>{width}.2f' + '}'
 		else:
 			labelFormat += '{0[' + str(i) + ']:>{width}}'
-	print labelFormat.format( entries, width=field_width)
+	print(labelFormat.format( entries, width=field_width))
 def histogramm(values):
         """Compute the histogramm of all values: a dictionnary dict[v]=count"""
         hist = {}
@@ -92,28 +92,28 @@ def histogramm(values):
         return hist
 
 def printHist(hist,N,field_width):
-        vals = []
-        cumulVals = []
-        cum = 0
-        for i in range(0,N):
-                if i in hist:
-                        vals.append(hist[i])
-                else:
-                        vals.append(0)
-                cum += vals[-1]
-                cumulVals.append(cum)
+	vals = []
+	cumulVals = []
+	cum = 0
+	for i in range(0,N):
+		if i in hist:
+			vals.append(hist[i])
+		else:
+			vals.append(0)
+		cum += vals[-1]
+		cumulVals.append(cum)
 		
-		# RZ: Inefficient but simple - sum all values, substracted accumulated ones.
-		total = 0
-		for key in hist.keys():
-			total += hist[key]
+	# RZ: Inefficient but simple - sum all values, substracted accumulated ones.
+	total = 0
+	for key in hist.keys():
+		total += hist[key]
 
-		remaining = total - cum
+	remaining = total - cum
 
-        printTable(field_width, [ '' ] +  range(0,N) + ['>' + str(N-1)])
-        print('----------------------------------------------------------------------------------')
-        printTable(field_width, [ 'Num. Files' ] + vals + [ remaining ])
-        printTable(field_width, [ 'Cum. Files' ] + cumulVals + [ total ])
+	printTable(field_width, [ '' ] + list(range(0,N)) + ['>' + str(N-1)])
+	print('----------------------------------------------------------------------------------')
+	printTable(field_width, [ 'Num. Files' ] + vals + [ remaining ])
+	printTable(field_width, [ 'Cum. Files' ] + cumulVals + [ total ])
 
 
 
@@ -151,7 +151,7 @@ def main():
 			fileList = fileList + [row[1]]
 			continue
 		for i in range(0,len(row),2):
-                        vName =  row[i].strip()
+			vName =  row[i].strip()
 			if vName not in allValues:
 				allValues[vName] = []
 			allValues[vName] = allValues[vName] \
@@ -159,6 +159,9 @@ def main():
 		nbEM+=1
 	
 	# Compile and display the sum for each metric.
+	print(allValues.keys())
+	print("aaaaa")
+
 	allSum = {}
 	allZeroCount = {}
 	zeroFileList = {}
@@ -166,7 +169,7 @@ def main():
 	for v in allValues.keys():
 		allSum[v] = sum(allValues[v])
 		#print(str(v) + " = " + str(allSum[v]))
-                allHist[v] = histogramm(allValues[v])
+		allHist[v] = histogramm(allValues[v])
 		allZeroCount[v] = 0
 		for s in range(len(allValues[v])):
 			if allValues[v][s] == 0:

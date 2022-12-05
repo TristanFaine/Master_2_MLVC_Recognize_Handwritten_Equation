@@ -90,6 +90,7 @@ def main():
     hyp = generateHypSeg(nbs)
     txtLG = toLG(hyp)
     if outputLG != "":
+        print(outputLG)
         with open(outputLG, "w") as text_file:
             print(txtLG, file=text_file)
     else:
