@@ -1,0 +1,27 @@
+# IUD, CROHME_2016_em_446
+# Objects(12):
+O, hellip_1, \ldots, 1.0, 8, 9, 10
+O, L_2, L, 1.0, 4
+O, +_1, +, 1.0, 2, 3
+O, L_3, L, 1.0, 13
+O, p_1, p, 1.0, 17
+O, 0_1, 0, 1.0, 1
+O, +_2, +, 1.0, 6, 7
+O, 1_1, 1, 1.0, 5
+O, =_1, =, 1.0, 15, 16
+O, m_1, m, 1.0, 14
+O, L_1, L, 1.0, 0
+O, +_3, +, 1.0, 11, 12
+
+# Relations from SRT:
+EO, +_1, L_2, Right, 1.0
+EO, +_2, hellip_1, Right, 1.0
+EO, +_3, L_3, Right, 1.0
+EO, =_1, p_1, Right, 1.0
+EO, L_1, +_1, Right, 1.0
+EO, L_1, 0_1, Sub, 1.0
+EO, L_2, +_2, Right, 1.0
+EO, L_2, 1_1, Sub, 1.0
+EO, L_3, =_1, Right, 1.0
+EO, L_3, m_1, Sub, 1.0
+EO, hellip_1, +_3, Right, 1.0

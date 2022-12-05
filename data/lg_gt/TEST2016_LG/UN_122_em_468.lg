@@ -1,0 +1,19 @@
+# IUD, CROHME_2016_em_468
+# Objects(8):
+O, 0_1, 0, 1.0, 8
+O, u_1, u, 1.0, 10
+O, =_1, =, 1.0, 1, 2
+O, tan_1, \tan, 1.0, 4, 5, 6
+O, y_1, y, 1.0, 7
+O, v_1, v, 1.0, 0
+O, )_1, ), 1.0, 9
+O, (_1, (, 1.0, 3
+
+# Relations from SRT:
+EO, (_1, tan_1, Right, 1.0
+EO, )_1, u_1, Right, 1.0
+EO, =_1, (_1, Right, 1.0
+EO, tan_1, y_1, Right, 1.0
+EO, v_1, =_1, Right, 1.0
+EO, y_1, )_1, Right, 1.0
+EO, y_1, 0_1, Sub, 1.0

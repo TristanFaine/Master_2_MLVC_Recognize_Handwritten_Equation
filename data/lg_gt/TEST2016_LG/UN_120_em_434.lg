@@ -1,0 +1,9 @@
+# IUD, CROHME_2016_em_434
+# Objects(3):
+O, a_1, a, 1.0, 2
+O, _1, \sqrt, 1.0, 0
+O, theta_1, \theta, 1.0, 1
+
+# Relations from SRT:
+EO, _1, a_1, Right, 1.0
+EO, _1, theta_1, Inside, 1.0

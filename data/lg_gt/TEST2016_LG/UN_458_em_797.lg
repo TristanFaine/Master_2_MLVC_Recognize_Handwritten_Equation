@@ -1,0 +1,35 @@
+# IUD, CROHME_2016_em_797
+# Objects(16):
+O, infin_1, \infty, 1.0, 7
+O, lim_1, \lim, 1.0, 0, 1, 2, 3
+O, 2_1, 2, 1.0, 11
+O, x_3, x, 1.0, 15
+O, 2_2, 2, 1.0, 14
+O, 2_3, 2, 1.0, 20
+O, e_1, e, 1.0, 8
+O, 4_1, 4, 1.0, 17, 16
+O, x_2, x, 1.0, 10
+O, -_3, -, 1.0, 19
+O, rarr_1, \rightarrow, 1.0, 5, 6
+O, -_2, -, 1.0, 13
+O, x_1, x, 1.0, 4
+O, alpha_2, \alpha, 1.0, 18
+O, alpha_1, \alpha, 1.0, 12
+O, -_1, -, 1.0, 9
+
+# Relations from SRT:
+EO, -_1, x_2, Right, 1.0
+EO, -_2, 2_2, Right, 1.0
+EO, -_3, 2_3, Right, 1.0
+EO, 2_1, alpha_1, Right, 1.0
+EO, 4_1, alpha_2, Right, 1.0
+EO, alpha_1, -_2, Right, 1.0
+EO, alpha_2, -_3, Right, 1.0
+EO, e_1, -_1, Sup, 1.0
+EO, lim_1, e_1, Right, 1.0
+EO, lim_1, x_1, Below, 1.0
+EO, rarr_1, infin_1, Right, 1.0
+EO, x_1, rarr_1, Right, 1.0
+EO, x_2, 2_1, Sup, 1.0
+EO, x_2, x_3, Right, 1.0
+EO, x_3, 4_1, Sup, 1.0

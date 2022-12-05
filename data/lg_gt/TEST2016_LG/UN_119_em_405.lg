@@ -1,0 +1,9 @@
+# IUD, CROHME_2016_em_405
+# Objects(3):
+O, _1, \sqrt, 1.0, 1
+O, int_1, \int, 1.0, 0
+O, gamma_1, \gamma, 1.0, 2
+
+# Relations from SRT:
+EO, _1, gamma_1, Inside, 1.0
+EO, int_1, _1, Right, 1.0

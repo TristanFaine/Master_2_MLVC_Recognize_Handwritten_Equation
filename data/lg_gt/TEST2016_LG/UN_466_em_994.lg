@@ -1,0 +1,9 @@
+# IUD, CROHME_2016_em_994
+# Objects(3):
+O, x_1, x, 1.0, 0
+O, infin_1, \infty, 1.0, 3
+O, rarr_1, \rightarrow, 1.0, 1, 2
+
+# Relations from SRT:
+EO, rarr_1, infin_1, Right, 1.0
+EO, x_1, rarr_1, Right, 1.0

@@ -1,0 +1,25 @@
+# IUD, CROHME_2016_em_246
+# Objects(11):
+O, pi_1, \pi, 1.0, 10, 11, 12
+O, )_1, ), 1.0, 8
+O, a_2, a, 1.0, 5
+O, cos_1, \cos, 1.0, 0, 1
+O, 0_1, 0, 1.0, 3
+O, 2_1, 2, 1.0, 14
+O, a_1, a, 1.0, 2
+O, _1, -, 1.0, 13
+O, -_1, -, 1.0, 4
+O, 1_1, 1, 1.0, 6, 7
+O, (_1, (, 1.0, 9
+
+# Relations from SRT:
+EO, (_1, a_1, Right, 1.0
+EO, )_1, pi_1, Right, 1.0
+EO, -_1, a_2, Right, 1.0
+EO, _1, (_1, Above, 1.0
+EO, _1, 2_1, Below, 1.0
+EO, a_1, -_1, Right, 1.0
+EO, a_1, 0_1, Sub, 1.0
+EO, a_2, )_1, Right, 1.0
+EO, a_2, 1_1, Sub, 1.0
+EO, cos_1, _1, Right, 1.0

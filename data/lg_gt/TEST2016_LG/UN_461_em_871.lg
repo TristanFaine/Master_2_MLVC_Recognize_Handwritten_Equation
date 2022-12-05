@@ -1,0 +1,21 @@
+# IUD, CROHME_2016_em_871
+# Objects(9):
+O, i_1, i, 1.0, 3, 4
+O, =_1, =, 1.0, 12, 13
+O, +_1, +, 1.0, 5, 6
+O, alpha_1, \alpha, 1.0, 2
+O, 1_1, 1, 1.0, 14
+O, sum_2, \sum, 1.0, 8, 7
+O, i_2, i, 1.0, 10, 11
+O, beta_1, \beta, 1.0, 9
+O, sum_1, \sum, 1.0, 0, 1
+
+# Relations from SRT:
+EO, +_1, sum_2, Right, 1.0
+EO, =_1, 1_1, Right, 1.0
+EO, alpha_1, +_1, Right, 1.0
+EO, alpha_1, i_1, Sub, 1.0
+EO, beta_1, =_1, Right, 1.0
+EO, beta_1, i_2, Sub, 1.0
+EO, sum_1, alpha_1, Right, 1.0
+EO, sum_2, beta_1, Right, 1.0

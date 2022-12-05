@@ -1,0 +1,13 @@
+# IUD, CROHME_2016_em_755
+# Objects(5):
+O, 3_1, 3, 1.0, 9
+O, ne_1, \neq, 1.0, 2, 3, 4
+O, 2_1, 2, 1.0, 5
+O, 1_1, 1, 1.0, 0, 1
+O, ne_2, \neq, 1.0, 7, 6, 8
+
+# Relations from SRT:
+EO, 1_1, ne_1, Right, 1.0
+EO, 2_1, ne_2, Right, 1.0
+EO, ne_1, 2_1, Right, 1.0
+EO, ne_2, 3_1, Right, 1.0

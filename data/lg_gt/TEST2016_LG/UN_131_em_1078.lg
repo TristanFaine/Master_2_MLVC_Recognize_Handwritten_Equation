@@ -1,0 +1,13 @@
+# IUD, CROHME_2016_em_1078
+# Objects(5):
+O, |_2, |, 1.0, 7
+O, |_1, |, 1.0, 2
+O, log_1, \log, 1.0, 0, 1
+O, sin_1, \sin, 1.0, 3, 4, 5
+O, q_1, q, 1.0, 6
+
+# Relations from SRT:
+EO, log_1, |_1, Right, 1.0
+EO, q_1, |_2, Right, 1.0
+EO, sin_1, q_1, Right, 1.0
+EO, |_1, sin_1, Right, 1.0

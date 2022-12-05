@@ -1,0 +1,9 @@
+# IUD, CROHME_2016_em_276
+# Objects(3):
+O, p_1, p, 1.0, 3
+O, 0_1, 0, 1.0, 4
+O, log_1, \log, 1.0, 0, 1, 2
+
+# Relations from SRT:
+EO, log_1, p_1, Right, 1.0
+EO, p_1, 0_1, Sub, 1.0
