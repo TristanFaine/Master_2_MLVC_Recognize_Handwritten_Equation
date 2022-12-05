@@ -17,8 +17,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 from random import sample
-from collections import Counter
-
 from modules import AlexNet
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -38,47 +36,44 @@ transform = transforms.Compose(
 
 minibatchsize = 8
 
-
-#TODO: From like 20000 images, get at least "enough" from each class,
-#hmmmm
 fullset = torchvision.datasets.ImageFolder(root='../data/symbol_recognition', transform=transform)
 
-nb_images = 20_000
+indices_by_class = [[] for _ in range(101)]
+for i, s in enumerate(fullset):
+    indices_by_class[s[1]].append(i)
+
+partialSetRatio = 1
+for i, cls in enumerate(indices_by_class):
+    indices_by_class[i] = sample(cls, int(len(cls) * partialSetRatio))
+
 partialSet = torch.utils.data.Subset(
     fullset,
-    sample(range(nb_images//2), nb_images//2)
+    [s for cls in indices_by_class for s in cls]
 )
 
 #split the full train part as train, validation and test, or use the 3 splits defined in the competition
 a_part = int(len(partialSet) / 5)
-trainset, validationset, testset = torch.utils.data.random_split(partialSet, [3 * a_part, a_part, len(partialSet) - 4 * a_part])
+trainset, validationset, testset = [
+    torch.utils.data.Subset(fullset, [
+        i
+        for cls in range(101)
+        for i in indices_by_class[cls][int(len(indices_by_class[cls]) * début):int(len(indices_by_class[cls]) * fin)]
+    ])
+    for début, fin in ((0, 3/5), (3/5, 4/5), (4/5, 1))
+]
 
-#Get number of samples per class
-import numpy as np 
-
-y_train_indices = trainset.indices
-
-y_train = [partialSet[i][1] for i in y_train_indices]
-
-class_sample_count = np.array([len(np.where(y_train == t)[0]) for t in np.unique(y_train)])
-
-#Then get weights for each class
-weight = 1. / class_sample_count
-samples_weight = np.array([weight[t] for t in y_train])
-samples_weight = torch.from_numpy(samples_weight)
+# sampler
+sampler = torch.utils.data.RandomSampler(partialSet)
 
 #Instantiate sampler and remember to refer to it inside the data loader
-weighted_sampler = torch.utils.data.WeightedRandomSampler(samples_weight.type('torch.DoubleTensor'), len(samples_weight))
-
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=minibatchsize,
-                                        sampler=weighted_sampler,drop_last =True, num_workers=1)
+trainloader = torch.utils.data.DataLoader(trainset, shuffle=True, batch_size=minibatchsize, drop_last =True, num_workers=1)
 
 validationloader = torch.utils.data.DataLoader(validationset, batch_size=minibatchsize,
-                                        shuffle=False, drop_last =True,num_workers=0)
+                                        shuffle=True, drop_last =True,num_workers=0)
 
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=minibatchsize,
-                                        shuffle=False,drop_last =True, num_workers=0)
+                                        shuffle=True,drop_last =True, num_workers=0)
 
 # define the set of class names :
 classes = [x[0].replace('../data/symbol_recognition/','') for x in os.walk('../data/symbol_recognition/')][1:] # all subdirectories, except itself
