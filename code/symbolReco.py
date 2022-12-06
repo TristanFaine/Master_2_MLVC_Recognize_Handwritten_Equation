@@ -115,7 +115,7 @@ def main():
     output = ""
     for h in hyplist:
         # for each hypo, call the classifier and keep only selected classes (only the best or more)
-        prob_dict = computeClProb(traces, h, 0.05, saveimg)
+        prob_dict = computeClProb(traces, h, 0.5, saveimg)
         #rewrite the new LG
         for cl, prob in prob_dict.items():
             output += "O,"+ h[0]+","+cl+","+str(prob)+","+",".join([str(s) for s in h[1]]) + "\n"
