@@ -1,0 +1,8 @@
+*N,2,ABSENT,1.0,:vs:,\Delta,1.0
+*N,1,sigma,1.0,:vs:,-,1.0
+*N,3,ABSENT,1.0,:vs:,c,1.0
+*N,0,ABSENT,1.0,:vs:,\sqrt,1.0
+*E,1,2,_,1.0,:vs:,Right,1.0
+*E,2,3,_,1.0,:vs:,Right,1.0
+*E,0,1,_,1.0,:vs:,Inside,1.0
+*E,0,2,_,1.0,:vs:,Inside,1.0
